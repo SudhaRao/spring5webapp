@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-
+import javax.persistence.OneToOne;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,12 +27,12 @@ public class Book {
 	private String title;
 	@Id
 	@GeneratedValue(strategy= GenerationType.AUTO)
-	private Long id;
-	private String isdn;
-	private String publisher;
-	
+	public Long id;
+	private String isbn;
+	@OneToOne
+	private Publisher publisher;
 	@Autowired
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany
 	@JoinTable(name = "author_book", joinColumns = @JoinColumn(name="book_id", referencedColumnName = "id"),
 	inverseJoinColumns = @JoinColumn(name="author_id", referencedColumnName = "id"))
 	private Set<Author> authors = new HashSet<>();
@@ -42,32 +42,29 @@ public class Book {
 		// TODO Auto-generated constructor stub
 	}
 	
-	
-	
-	public Book(String title, String isdn, String publisher, Set<Author> authors) {
+	public Book(String title, String isbn, Publisher publisher) {
 		super();
 		this.title = title;
-		this.isdn = isdn;
+		this.isbn = isbn;
+		this.publisher = publisher;
+	}
+
+
+	public Book(String title, String isbn, Publisher publisher, Set<Author> authors) {
+		super();
+		this.title = title;
+		this.isbn = isbn;
 		this.publisher = publisher;
 		this.authors = authors;
 	}
-
-
-
-	public Book(String title, String isdn, String publisher) {
-		super();
-		this.title = title;
-		this.isdn = isdn;
-		this.publisher = publisher;
-	}
-
+	
 	
 
-	public Book(String title, Long id, String isdn, String publisher, Set<Author> authors) {
+	public Book(String title, Long id, String isbn, Publisher publisher, Set<Author> authors) {
 		super();
 		this.title = title;
 		this.id = id;
-		this.isdn = isdn;
+		this.isbn = isbn;
 		this.publisher = publisher;
 		this.authors = authors;
 	}
@@ -84,16 +81,16 @@ public class Book {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getIsdn() {
-		return isdn;
+	public String getIsbn() {
+		return isbn;
 	}
-	public void setIsdn(String isdn) {
-		this.isdn = isdn;
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
 	}
-	public String getPublisher() {
+	public Publisher getPublisher() {
 		return publisher;
 	}
-	public void setPublisher(String publisher) {
+	public void setPublisher(Publisher publisher) {
 		this.publisher = publisher;
 	}
 	public Set<Author> getAuthors() {
